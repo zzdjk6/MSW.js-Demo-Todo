@@ -3,8 +3,11 @@
 ## Progress
 
 * [x] A functional app with local states
-* [ ] A functional app with mock server
-* [ ] Testing
+* [x] A functional app with mock server
+* [ ] Use Axios
+* [ ] Testing code
+    * [ ] Reset data storage & handlers
+    * [ ] Compare mock fetch, mock module, and MSW
 
 ## How to run
 

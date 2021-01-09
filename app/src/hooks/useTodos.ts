@@ -1,6 +1,7 @@
 import { Todo, TodoStatusFilter } from "../models/Todo";
 import { useEffect, useState } from "react";
 import { todoApi } from "../api/todo";
+import { compareAsc, compareDesc, isAfter } from "date-fns";
 
 export const useTodos = (statusFilter: TodoStatusFilter) => {
   const [fetchedTodos, setFetchedTodos] = useState<Todo[]>([]);
@@ -29,17 +30,27 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
 
   const toggleTodo = async (id: number) => {
     try {
-      await todoApi.toggleTodo(id);
+      const todo = fetchedTodos.find((todo) => todo.id === id);
+
+      if (!todo) {
+        return;
+      }
+
+      let updatedTodo: Todo;
+
+      if (todo.completed) {
+        updatedTodo = await todoApi.markTodoInCompleted(id);
+      } else {
+        updatedTodo = await todoApi.markTodoCompleted(id);
+      }
+
       setFetchedTodos((prevState) => {
         return prevState.map((todo) => {
           if (todo.id !== id) {
             return todo;
           }
 
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
+          return updatedTodo;
         });
       });
     } catch (e) {
@@ -69,7 +80,9 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
         return weightA - weightB;
       }
 
-      return b.updateAt.localeCompare(a.updateAt);
+      const dateA = new Date(a.updateAt);
+      const dateB = new Date(b.updateAt);
+      return compareDesc(dateA, dateB);
     });
 
   return {
