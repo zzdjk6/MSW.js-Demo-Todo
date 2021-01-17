@@ -1,9 +1,5 @@
 import { setupWorker } from "msw";
-import { handlers } from "./handlers";
-import { resetDataStorage } from "./storage/dataStorage";
+import { handlers } from "../handlers/handlers";
 
 // This configures a Service Worker with the given request handlers.
-
-resetDataStorage();
-
 export const worker = setupWorker(...handlers);

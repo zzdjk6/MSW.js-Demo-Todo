@@ -2,11 +2,12 @@ import has from "lodash/has";
 import get from "lodash/get";
 import toInteger from "lodash/toInteger";
 import { rest } from "msw";
-import { dataStorage } from "../../../../storage/dataStorage";
+import { inMemoryData } from "../../../../data-storage/inMemoryData";
+import { Todo } from "../../../../../models/Todo";
 
 const handler = rest.patch<string>("/api/todos/:id", (req, res, ctx) => {
   const id = toInteger(req.params.id);
-  const todo = dataStorage.todos[id];
+  const todo = inMemoryData.todos.getItem(id);
 
   if (!todo) {
     return res(ctx.status(404));
@@ -23,14 +24,17 @@ const handler = rest.patch<string>("/api/todos/:id", (req, res, ctx) => {
     );
   }
 
-  const completed = Boolean(get(bodyJson, "completed"));
-  dataStorage.todos[id].completed = completed;
-  dataStorage.todos[id].updateAt = new Date().toISOString();
+  const updatedTodo: Todo = {
+    ...todo,
+    completed: Boolean(get(bodyJson, "completed")),
+    updateAt: new Date().toISOString(),
+  };
+  inMemoryData.todos.setItem(id, updatedTodo);
 
   return res(
     ctx.status(200),
     ctx.json({
-      data: todo,
+      data: updatedTodo,
     })
   );
 });

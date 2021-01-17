@@ -19,7 +19,7 @@ type Props = {
 
 const TodoItem: React.FC<Props> = ({ todo, deleteTodo, toggleTodo }) => {
   return (
-    <ListItem>
+    <ListItem ContainerProps={{ "data-testid": "TodoItem" } as any}>
       <ListItemIcon>
         <Checkbox
           edge="start"
@@ -28,6 +28,7 @@ const TodoItem: React.FC<Props> = ({ todo, deleteTodo, toggleTodo }) => {
           onClick={async (event) => {
             await toggleTodo(todo.id);
           }}
+          aria-label={todo.description}
         />
       </ListItemIcon>
       <ListItemText
@@ -44,6 +45,7 @@ const TodoItem: React.FC<Props> = ({ todo, deleteTodo, toggleTodo }) => {
             event.stopPropagation();
             await deleteTodo(todo.id);
           }}
+          aria-label={"Delete"}
         >
           <DeleteIcon />
         </IconButton>

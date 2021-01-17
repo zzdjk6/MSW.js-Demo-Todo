@@ -7,6 +7,10 @@ export const todoApi = {
   fetchTodos: async (statusFilter: TodoStatusFilter) => {
     // TODO: API request
     const response = await fetch(`/api/todos?status=${statusFilter}`);
+    if (!response.ok) {
+      throw new Error("Fail to fetch todos");
+    }
+
     const json = await response.json();
     const data = get(json, "data");
 
@@ -24,36 +28,49 @@ export const todoApi = {
         description,
       }),
     });
+    if (!response.ok) {
+      throw new Error("Fail to add todo");
+    }
+
     const json = await response.json();
     const data = get(json, "data");
     return parseTodo(data);
   },
   deleteTodo: async (id: number) => {
-    // TODO: API request
-    await fetch(`/api/todos/${id}`, {
+    const response = await fetch(`/api/todos/${id}`, {
       method: "DELETE",
     });
+    if (!response.ok) {
+      throw new Error("Fail to delete todo");
+    }
   },
   markTodoCompleted: async (id: number) => {
-    // TODO: API request
     const response = await fetch(`/api/todos/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
         completed: true,
       }),
     });
+    if (!response.ok) {
+      throw new Error("Fail to mark todo completed");
+    }
+
     const json = await response.json();
     const data = get(json, "data");
     return parseTodo(data);
   },
   markTodoInCompleted: async (id: number) => {
-    // TODO: API request
     const response = await fetch(`/api/todos/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
         completed: false,
       }),
     });
+
+    if (!response.ok) {
+      throw new Error("Fail to mark todo incompleted");
+    }
+
     const json = await response.json();
     const data = get(json, "data");
     return parseTodo(data);

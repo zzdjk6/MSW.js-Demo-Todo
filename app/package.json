@@ -7,13 +7,19 @@
     "@emotion/styled": "latest",
     "@material-ui/core": "next",
     "@material-ui/icons": "next",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
+    "@testing-library/user-event": "^12.6.0",
     "@types/date-fns": "^2.6.0",
+    "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.167",
+    "@types/nanoid": "^2.1.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "date-fns": "^2.16.1",
     "lodash": "^4.17.20",
     "msw": "^0.25.0",
+    "nanoid": "^3.1.20",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
@@ -36,5 +42,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0"
   }
 }

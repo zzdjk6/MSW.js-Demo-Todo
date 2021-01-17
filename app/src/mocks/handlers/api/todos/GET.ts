@@ -1,10 +1,10 @@
 import { rest } from "msw";
-import { dataStorage } from "../../../storage/dataStorage";
+import { inMemoryData } from "../../../data-storage/inMemoryData";
 
 const handler = rest.get("/api/todos", (req, res, ctx) => {
   const statusFilter = req.url.searchParams.get("status") || "all";
 
-  const todos = Object.values(dataStorage.todos);
+  const todos = Object.values(inMemoryData.todos.getAllItems());
 
   const data = todos.filter((todo) => {
     switch (statusFilter) {

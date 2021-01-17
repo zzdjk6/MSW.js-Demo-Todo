@@ -1,13 +1,17 @@
 # Demo: Better network request mocking with MSW.js
 
+## Assumption
+
+We need to fetch data from the server when changing tabs.
+
 ## Progress
 
 * [x] A functional app with local states
 * [x] A functional app with mock server
-* [ ] Use Axios
-* [ ] Testing code
-    * [ ] Reset data storage & handlers
-    * [ ] Compare mock fetch, mock module, and MSW
+* [x] Reset data storage & handlers
+* [x] Testing code
+* [ ] One-off mock for error handling  
+* [ ] Compare mock fetch (one-off), mock module, and MSW
 
 ## How to run
 

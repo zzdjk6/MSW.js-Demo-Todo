@@ -1,14 +1,9 @@
 import { rest } from "msw";
-import { dataStorage } from "../../../storage/dataStorage";
-import max from "lodash/max";
+import { inMemoryData } from "../../../data-storage/inMemoryData";
 import { Todo } from "../../../../models/Todo";
 import get from "lodash/get";
-import toInteger from "lodash/toInteger";
 
 const handler = rest.post<string>("/api/todos", (req, res, ctx) => {
-  const maxId = max<number>(Object.keys(dataStorage.todos).map(toInteger)) || 0;
-  const nextId = maxId + 1;
-
   const description = get(JSON.parse(req.body), "description") || "";
 
   if (!description) {
@@ -20,6 +15,8 @@ const handler = rest.post<string>("/api/todos", (req, res, ctx) => {
     );
   }
 
+  const nextId = inMemoryData.todos.getNextId();
+
   const newTodo: Todo = {
     id: nextId,
     completed: false,
@@ -28,7 +25,7 @@ const handler = rest.post<string>("/api/todos", (req, res, ctx) => {
     updateAt: new Date().toISOString(),
   };
 
-  dataStorage.todos[nextId] = newTodo;
+  inMemoryData.todos.setItem(nextId, newTodo);
 
   return res(
     ctx.status(201),
