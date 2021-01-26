@@ -1,5 +1,5 @@
-import { server } from "mocks/env/nodejs";
-import { resetInMemoryData } from "./mocks/data-storage/inMemoryData";
+import { server } from "mock-server/env/nodejs";
+import { resetInMemoryData } from "./mock-server/data-storage/inMemoryData";
 
 jest.setTimeout(10000);
 
