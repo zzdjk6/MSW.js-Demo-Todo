@@ -3,6 +3,8 @@ import App from "./App";
 import { waitFor } from "./test-utils/waitFor";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { server } from "./mock-server/env/nodejs";
+import { rest } from "msw";
 
 // Constants and Helpers
 const TODO_1_TEXT = "TODO1: Active";
@@ -98,6 +100,36 @@ describe("Delete todo item", () => {
       expect(getTodoItems()).toHaveLength(1);
     });
     expect(screen.queryByText(TODO_2_TEXT)).not.toBeInTheDocument();
+  });
+
+  it("should show error message when fail to delete todo item", async () => {
+    // Init
+    await renderApp();
+
+    // Get a completed item
+    const todoItem = getTodoItems()[1];
+    expect(within(todoItem).getByText(TODO_2_TEXT)).toBeInTheDocument();
+
+    // Temporarily force delete api to return error
+    server.use(
+      rest.delete("/todo/:id", (req, res, ctx) => {
+        return res(ctx.status(400));
+      })
+    );
+
+    // Click delete button
+    const deleteButton = within(todoItem).getByRole("button", {
+      name: /delete/i,
+    });
+    userEvent.click(deleteButton);
+
+    // Expect error message displays
+    await waitFor(() => {
+      expect(screen.queryByText(/Fail to delete/i));
+    });
+
+    // Assert the item is still there
+    expect(screen.queryByText(TODO_2_TEXT)).toBeInTheDocument();
   });
 });
 

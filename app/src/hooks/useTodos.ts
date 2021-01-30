@@ -6,6 +6,8 @@ import { compareAsc, compareDesc, isAfter } from "date-fns";
 export const useTodos = (statusFilter: TodoStatusFilter) => {
   const [fetchedTodos, setFetchedTodos] = useState<Todo[]>([]);
 
+  const [error, setError] = useState<string | null>(null);
+
   const addTodo = async (description: string) => {
     try {
       const newTodo = await todoApi.addTodo(description);
@@ -13,6 +15,7 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
         return [...prevState, newTodo];
       });
     } catch (e) {
+      setError("Fail to add todo");
       console.error(e);
     }
   };
@@ -24,6 +27,7 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
         return prevState.filter((todo) => todo.id !== id);
       });
     } catch (e) {
+      setError("Fail to delete todo");
       console.error(e);
     }
   };
@@ -54,6 +58,7 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
         });
       });
     } catch (e) {
+      setError("Fail to update todo");
       console.error(e);
     }
   };
@@ -90,5 +95,7 @@ export const useTodos = (statusFilter: TodoStatusFilter) => {
     addTodo,
     deleteTodo,
     toggleTodo,
+    error,
+    setError,
   };
 };
