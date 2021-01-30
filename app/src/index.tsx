@@ -4,13 +4,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import App from "./App";
 import theme from "./theme";
-import { resetInMemoryData } from "./mock-server/data-storage/inMemoryData";
+import { resetMockDataStore } from "./mock-server/data-storage/mockDataStore";
 
 const prepare = () => {
   // Setup mock server before rendering React components
   if (process.env.NODE_ENV === "development") {
     const { worker } = require("./mock-server/env/browser");
-    return worker.start().then(() => resetInMemoryData());
+    return worker.start();
   }
   return Promise.resolve();
 };

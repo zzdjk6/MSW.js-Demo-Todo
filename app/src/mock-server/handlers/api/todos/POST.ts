@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { inMemoryData } from "../../../data-storage/inMemoryData";
+import { mockDataStore } from "../../../data-storage/mockDataStore";
 import { Todo } from "../../../../models/Todo";
 import get from "lodash/get";
 
@@ -15,7 +15,7 @@ const handler = rest.post<string>("/api/todos", (req, res, ctx) => {
     );
   }
 
-  const nextId = inMemoryData.todos.getNextId();
+  const nextId = mockDataStore.todos.getNextId();
 
   const newTodo: Todo = {
     id: nextId,
@@ -25,7 +25,7 @@ const handler = rest.post<string>("/api/todos", (req, res, ctx) => {
     updateAt: new Date().toISOString(),
   };
 
-  inMemoryData.todos.setItem(nextId, newTodo);
+  mockDataStore.todos.setItem(nextId, newTodo);
 
   return res(
     ctx.status(201),

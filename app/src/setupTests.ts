@@ -1,5 +1,5 @@
 import { server } from "mock-server/env/nodejs";
-import { resetInMemoryData } from "./mock-server/data-storage/inMemoryData";
+import { resetMockDataStore } from "./mock-server/data-storage/mockDataStore";
 
 jest.setTimeout(10000);
 
@@ -14,5 +14,5 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 // Reset mock data storage
-beforeAll(() => resetInMemoryData());
-afterEach(() => resetInMemoryData());
+beforeAll(() => resetMockDataStore());
+afterEach(() => resetMockDataStore());
