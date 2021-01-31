@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Tech Talk - Thor Chen</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/vs2015.css" id="highlight-theme" />
+
+    <style>
+      .reveal > .slides > section {
+        text-align: left;
+        font-size: 1em;
+      }
+
+      .reveal > .slides > section ul {
+        line-height: 1.5;
+      }
+
+      .reveal pre {
+        width: 100%;
+      }
+
+      .intro-hashtag {
+        color: lightgray;
+        font-size: 0.5em;
+        padding-top: 0.5em;
+      }
+
+      .intro-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .intro-header > h2 {
+        text-transform: none;
+        font-size: 1.25em;
+      }
+
+      .intro-header > h3 {
+        text-transform: none;
+        font-size: 1em;
+      }
+
+      .intro-footer {
+        font-size: 0.5em;
+        padding-bottom: 0.5em;
+      }
+
+      .page-title {
+        padding-top: 0.5em;
+        padding-bottom: 0;
+        font-size: 0.75em;
+      }
+
+      .highlight-orange {
+        color: orange;
+      }
+
+      .highlight-blue {
+        color: #569cd6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Intro -->
+        <section>
+          <div class="intro-hashtag">#ObjectiveTechTalk</div>
+          <header class="intro-header page-main-content r-stretch">
+            <h2>Get a mocking API backend that feels real with MSW.js</h2>
+            <h3>A Todo List demo with React and TypeScript</h3>
+          </header>
+          <p class="intro-footer">
+            Thor Chen <br />
+            The frontend guy in Objective Build team
+          </p>
+        </section>
+
+        <!-- Agenda -->
+        <section>
+          <header>
+            <h2 class="page-title">Agenda</h2>
+          </header>
+          <div>
+            <ul>
+              <li>Why do we need a mocking API backend?</li>
+              <li>Why mocking with MSW.js?</li>
+              <li>Opinionated setup: a Todo List example</li>
+              <li>Make the mock server feels real</li>
+              <li>Gotchas</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Why mocking -->
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title">Why mocking?</h2>
+          </header>
+          <div>
+            <ul>
+              <li>Development</li>
+              <li>Testing</li>
+              <li>Debugging</li>
+            </ul>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title">Why mocking?</h2>
+          </header>
+          <div>
+            <ul>
+              <li>Development</li>
+            </ul>
+            <p>☑ develop frontend and backend in parallel</p>
+            <p>☑ express what frontend wants out of backend</p>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title">Why mocking?</h2>
+          </header>
+          <div>
+            <ul>
+              <li>Development</li>
+            </ul>
+            <p>☑ develop frontend and backend in parallel</p>
+            <p>☑ express what frontend wants out of backend</p>
+
+            <ul>
+              <li>Testing</li>
+            </ul>
+            <p>☑ unit and integration tests without sending network requests</p>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title">Why mocking?</h2>
+          </header>
+          <div>
+            <ul>
+              <li>Development</li>
+            </ul>
+            <p>☑ develop frontend and backend in parallel</p>
+            <p>☑ express what frontend wants out of backend</p>
+
+            <ul>
+              <li>Testing</li>
+            </ul>
+            <p>☑ unit and integration tests without sending network requests</p>
+
+            <ul>
+              <li>Debugging</li>
+            </ul>
+            <p>☑ reproduce issue with specific response without jumping into backend</p>
+          </div>
+        </section>
+
+        <!-- Why MSW -->
+        <section>
+          <header>
+            <h2 class="page-title">Why MSW.js?</h2>
+          </header>
+          <ul>
+            <li class="fragment fade">Seamless Integration</li>
+            <li class="fragment fade">Real backend behaviour</li>
+            <li class="fragment fade">Easy to maintain and re-use</li>
+            <li class="fragment fade">Easy to inspect</li>
+            <li class="fragment fade">Easy to use</li>
+            <li class="fragment fade">...and more</li>
+          </ul>
+          <div class="fragment fade">
+            <img src="img/msw-trusted-by.png" alt="Companies trust msw.js" />
+          </div>
+        </section>
+
+        <!-- What is MSW -->
+        <section>
+          <header>
+            <h2 class="page-title">What is MSW.js?</h2>
+          </header>
+          <p class="fragment">
+            MSW = <strong class="highlight-orange">M</strong>ock <strong class="highlight-orange">S</strong>ervice <strong class="highlight-orange">W</strong>orker
+            <br />
+            <small class="fragment">-- an API mocking library that uses Service Worker API to intercept actual requests</small>
+          </p>
+          <div class="fragment">
+            <img src="img/msw-network-flow.jpeg" alt="MSW.js network flow" />
+          </div>
+        </section>
+
+        <!-- Example: Todo List -->
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title" style="margin-bottom: 0; padding-bottom: 0; display: flex; align-items: baseline">
+              Opinionated setup:&nbsp;
+              <small>Todo List example</small>
+            </h2>
+          </header>
+          <div style="display: flex; padding-top: 16px">
+            <div style="flex: 0 0 375px">
+              <iframe src="http://localhost:3000" width="375" height="667"></iframe>
+            </div>
+            <div style="flex: 0 0 32px"></div>
+            <div style="flex: 1 0 auto">
+              <h3 style="text-transform: none">Features:</h3>
+              <ul>
+                <li>Fetch todo items</li>
+                <li>Create a todo item</li>
+                <li>Delete a todo item</li>
+                <li>Toggle the status of a todo item</li>
+                <li>Filter todo items by status</li>
+              </ul>
+
+              <div style="height: 32px"></div>
+
+              <h3 style="text-transform: none">Assumption:</h3>
+              <p>The todo items should be filtered by backend</p>
+            </div>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <header>
+            <h2 class="page-title" style="margin-bottom: 0; padding-bottom: 0; display: flex; align-items: baseline">
+              Opinionated setup:&nbsp;
+              <small>Todo List example</small>
+            </h2>
+          </header>
+          <div style="display: flex; padding-top: 16px">
+            <div style="flex: 0 0 375px">
+              <iframe src="http://localhost:3000" width="375" height="667"></iframe>
+            </div>
+            <div style="flex: 0 0 32px"></div>
+            <div style="flex: 1 0 auto">
+              <h3>REST API:</h3>
+              <ul>
+                <li><span class="highlight-blue">GET</span> /api/todos</li>
+                <li><span class="highlight-blue">POST</span> /api/todos</li>
+                <li><span class="highlight-blue">PATCH</span> /api/todos/:id</li>
+                <li><span class="highlight-blue">DELETE</span> /api/todos/:id</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Example: Setup -->
+        <section>
+          <header>
+            <h2 class="page-title">Setup: Preparation</h2>
+          </header>
+
+          <div>
+            Install:
+
+            <pre><code data-trim data-noescape>
+              npm install msw
+            </code></pre>
+          </div>
+
+          <div>
+            Init:
+
+            <pre><code data-trim data-noescape>
+             npx msw init ./public
+            </code></pre>
+          </div>
+
+          <div>Result:</div>
+          <div style="display: flex">
+            <img src="img/msw-init.png" />
+            <div style="flex: 1; padding-left: 16px; padding-top: 16px">
+              <small>
+                <dl>
+                  <dt>mockServiceWorker.js</dt>
+                  <dd>the service worker that intercepts our requests</dd>
+                </dl>
+              </small>
+            </div>
+          </div>
+        </section>
+
+        <!-- Folder structure -->
+        <section>
+          <header>
+            <h2 class="page-title">Folder structure</h2>
+          </header>
+
+          <div>
+            <pre><code data-trim data-noescape class="plaintext">
+src
+ └── mock-server
+     ├── data-storage
+     ├── env
+     ├── fixtures
+     └── handlers
+              </code></pre>
+          </div>
+
+          <small>
+            <dl>
+              <dt>data-storage</dt>
+              <dd>files for data persist / backend states</dd>
+
+              <dt>env</dt>
+              <dd>integration setup code</dd>
+
+              <dt>fixtures</dt>
+              <dd>fixture data (e.g., JSON files)</dd>
+
+              <dt>handlers</dt>
+              <dd>match and handle requests and return mocked responses</dd>
+            </dl>
+          </small>
+        </section>
+
+        <!-- Create request handlers -->
+        <section>
+          <header>
+            <h2 class="page-title">Request handlers</h2>
+          </header>
+          <div>
+            <pre><code data-trim data-noescape class="plaintext">
+src/mock-server/handlers
+├── api
+│   └── todos
+│       ├── GET.ts
+│       ├── POST.ts
+│       └── [id]
+│           ├── DELETE.ts
+│           └── PATCH.ts
+└── handlers.ts
+              </code></pre>
+          </div>
+
+          <small>
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Path</th>
+                  <th>File Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>GET</td>
+                  <td>/api/todos</td>
+                  <td>…/handlers/api/todos/GET.ts</td>
+                </tr>
+                <tr>
+                  <td>POST</td>
+                  <td>/api/todos</td>
+                  <td>…/handlers/api/todos/POST.ts</td>
+                </tr>
+                <tr>
+                  <td>PATCH</td>
+                  <td>/api/todos/:id</td>
+                  <td>…/handlers/api/todos/[id]/PATCH.ts</td>
+                </tr>
+                <tr>
+                  <td>DELETE</td>
+                  <td>/api/todos/:id</td>
+                  <td>…/handlers/api/todos/[id]/DELETE.ts</td>
+                </tr>
+              </tbody>
+            </table>
+          </small>
+
+          <p><small>☑ Makes it easy and natrual to find and modify a request handler based on the route</small></p>
+        </section>
+
+        <!-- Request handler: GET /api/todos -->
+        <section>
+          <h2 class="page-title">Sample request handler</h2>
+
+          <div>
+            <pre><code data-trim data-noescape class="typescript">
+// File: src/mock-server/handlers/api/todos/GET.ts
+
+import { rest } from "msw";
+
+const handler = rest.get("/api/todos", (req, res, ctx) => {
+  // Construct payload for response
+  const json = { data: [] };
+  // Return response
+  return res(ctx.status(200), ctx.json(json));
+});
+
+export default handler;
+</code></pre>
+          </div>
+        </section>
+
+        <!-- Request handler: index all request handlers -->
+        <section>
+          <h2 class="page-title">The index of handlers</h2>
+
+          <div>
+            <pre><code data-trim data-noescape class="typescript">
+// File: src/mock-server/handlers/handlers.ts
+
+export const handlers = [
+    require("./api/todos/GET").default,
+    require("./api/todos/POST").default,
+    require("./api/todos/[id]/PATCH").default,
+    require("./api/todos/[id]/DELETE").default,
+];
+</code></pre>
+          </div>
+        </section>
+
+        <!-- Browser integration -->
+        <section>
+          <h2 class="page-title">Browser integration</h2>
+
+          <div>
+            <pre><code data-trim data-noescape class="typescript">
+// File: src/mock-server/env/browser.ts
+
+import { setupWorker } from "msw";
+import { handlers } from "../handlers/handlers";
+
+// This configures a Service Worker with the given request handlers.
+export const worker = setupWorker(...handlers);
+</code></pre>
+          </div>
+          <div>
+            <pre><code data-trim data-noescape class="typescript">
+// File: src/index.tsx
+
+const prepare = async () => {
+  // Setup mock server before rendering React components
+  if (process.env.NODE_ENV === "development") {
+    const { worker } = require("./mock-server/env/browser");
+    await worker.start();
+  }
+};
+
+prepare().then(() => {
+  ReactDOM.render(<App />, document.querySelector("#root"));
+});
+            </code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="page-title">Browser integration</h2>
+          <div>
+            <img src="img/msw-browser-log-success.png" alt="" />
+          </div>
+          <div style="display: flex">
+            <div>
+              <img src="img/msw-browser-success-header.png" alt="" />
+            </div>
+            <div>
+              <img src="img/msw-browser-success-payload.png" alt="" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Node.js integration -->
+        <section>
+          <h2 class="page-title">Node.js integration</h2>
+          <ul>
+            <li>No service worker</li>
+            <li>All the request handlers can be shared</li>
+          </ul>
+
+          <pre><code data-trim data-noescape class="typescript">
+                // File: src/mocks/server.js
+                
+                import { setupServer } from "msw/node";
+                import { handlers } from "../handlers/handlers";
+                
+                // This configures a request mocking server with the given request handlers.
+                export const server = setupServer(...handlers);
+                </code></pre>
+        </section>
+
+        <section>
+          <h2 class="page-title">Node.js integration</h2>
+          <pre><code data-trim data-noescape class="typescript">
+// File: src/setupTests.ts
+
+import { server } from "mock-server/env/nodejs";
+
+// Establish API mocking before all tests.
+beforeAll(() => server.listen());
+
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests.
+afterEach(() => server.resetHandlers());
+
+// Clean up after the tests are finished.
+afterAll(() => server.close());
+</code></pre>
+        </section>
+
+        <!-- Make the mock server to be more real -->
+        <section>
+          <h2 class="page-title">Mock server, more real?</h2>
+          <p>Go beyond serving static data for every single request</p>
+          <ul>
+            <li>Dynamic response based on request information</li>
+            <li>Handle backend states / persist data</li>
+          </ul>
+        </section>
+
+        <!-- Temproral overwriting -->
+        <section>
+          <h2 class="page-title">Temproral overwriting</h2>
+        </section>
+
+        <!-- Placeholder -->
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        width: 1280,
+        height: 800,
+        center: false,
+        slideNumber: true,
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
