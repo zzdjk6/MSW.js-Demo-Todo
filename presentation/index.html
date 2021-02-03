@@ -20,9 +20,9 @@
         <section>
           <div class="intro-hashtag">#ObjectiveTechTalk</div>
           <header class="intro-header page-main-content r-stretch">
-            <h2>Get a mocking API backend that feels real with <span class="highlight-orange">MSW.js</span></h2>
+            <h2>Mocking API backend for frontend with <span class="highlight-orange">MSW.js</span></h2>
             <div class="spacer-y-2"></div>
-            <h3><i style="border-top: 5px white solid; padding-top: 8px;">A Todo List demo with React and TypeScript</i></h3>
+            <h3><i style="border-top: 5px white solid; padding-top: 8px">plus a Todo List demo written in React and TypeScript</i></h3>
           </header>
           <p class="intro-footer">
             Thor Chen <br />
@@ -37,9 +37,9 @@
           </header>
           <div>
             <ul>
-              <li>Why do we need a mocking API backend?</li>
-              <li>Why mocking with MSW.js?</li>
-              <li>Opinionated setup: a Todo List example</li>
+              <li>Why do we want to mock API backend?</li>
+              <li>Why should we mock with MSW.js?</li>
+              <li>How to set up a mocking server, opinionated way</li>
               <li>Make the mock server feels real</li>
               <li>Gotchas</li>
             </ul>
@@ -47,70 +47,53 @@
         </section>
 
         <!-- Why mocking -->
-        <section data-auto-animate>
+        <section>
           <header>
             <h2 class="page-title">Why mocking?</h2>
           </header>
           <div>
-            <ul>
-              <li>Development</li>
-              <li>Testing</li>
-              <li>Debugging</li>
-            </ul>
+            <dl>
+              <dt>Development</dt>
+            </dl>
+
+            <div style="margin-top: 0.5em">
+              <dl>
+                <dt>Testing</dt>
+              </dl>
+            </div>
+
+            <div style="margin-top: 0.5em">
+              <dl>
+                <dt>Debugging</dt>
+              </dl>
+            </div>
           </div>
         </section>
-
-        <section data-auto-animate>
+        <section>
           <header>
             <h2 class="page-title">Why mocking?</h2>
           </header>
           <div>
-            <ul>
-              <li>Development</li>
-            </ul>
-            <p>☑ develop frontend and backend in parallel</p>
-            <p>☑ express what frontend wants out of backend</p>
-          </div>
-        </section>
+            <dl>
+              <dt>Development</dt>
+              <dd>☑ develop frontend and backend in parallel</dd>
+              <dd>☑ express API needs from frontend perspective</dd>
+              <dd>☑ help collaborate on UI/UX with a determinated playground</dd>
+            </dl>
 
-        <section data-auto-animate>
-          <header>
-            <h2 class="page-title">Why mocking?</h2>
-          </header>
-          <div>
-            <ul>
-              <li>Development</li>
-            </ul>
-            <p>☑ develop frontend and backend in parallel</p>
-            <p>☑ express what frontend wants out of backend</p>
+            <div class="fragment" style="margin-top: 0.5em">
+              <dl>
+                <dt>Testing</dt>
+                <dd>☑ scope unit and integration tests within frontend boundary</dd>
+              </dl>
+            </div>
 
-            <ul>
-              <li>Testing</li>
-            </ul>
-            <p>☑ unit and integration tests without sending network requests</p>
-          </div>
-        </section>
-
-        <section data-auto-animate>
-          <header>
-            <h2 class="page-title">Why mocking?</h2>
-          </header>
-          <div>
-            <ul>
-              <li>Development</li>
-            </ul>
-            <p>☑ develop frontend and backend in parallel</p>
-            <p>☑ express what frontend wants out of backend</p>
-
-            <ul>
-              <li>Testing</li>
-            </ul>
-            <p>☑ unit and integration tests without sending network requests</p>
-
-            <ul>
-              <li>Debugging</li>
-            </ul>
-            <p>☑ reproduce issue with specific response without jumping into backend</p>
+            <div class="fragment" style="margin-top: 0.5em">
+              <dl>
+                <dt>Debugging</dt>
+                <dd>☑ reproduce specific scenario with specific API response</dd>
+              </dl>
+            </div>
           </div>
         </section>
 
@@ -121,15 +104,20 @@
           </header>
           <ul>
             <li class="fragment fade">Seamless Integration</li>
-            <li class="fragment fade">Real backend behaviour</li>
-            <li class="fragment fade">Easy to maintain and re-use</li>
-            <li class="fragment fade">Easy to inspect</li>
-            <li class="fragment fade">Easy to use</li>
-            <li class="fragment fade">...and more</li>
+            <li class="fragment fade">Real backend behaviour, not static response</li>
+            <li class="fragment fade">Easy to maintain - centralized mock logic</li>
+            <li class="fragment fade">Mock logic is reused in different contexts</li>
+            <li class="fragment fade">Inspect network requests via browser's devtools</li>
+            <li class="fragment fade">Easy-to-use route matching system (express-like)</li>
+            <li class="fragment fade">
+              Trusted
+              <div style="display: flex; flex-direction: column">
+                <img src="img/msw-github.jpg" alt="MSW github" style="margin: 0" />
+                <div class="spacer-y-1"></div>
+                <img src="img/msw-trusted-by.png" alt="Companies trust msw.js" style="margin: 0" />
+              </div>
+            </li>
           </ul>
-          <div class="fragment fade">
-            <img src="img/msw-trusted-by.png" alt="Companies trust msw.js" />
-          </div>
         </section>
 
         <!-- What is MSW -->
@@ -150,10 +138,7 @@
         <!-- Example: Todo List -->
         <section data-auto-animate>
           <header>
-            <h2 class="page-title">
-              Opinionated setup -
-              <small style="vertical-align: middle">Todo List example</small>
-            </h2>
+            <h2 class="page-title">Set up a mock server for Todo List</h2>
           </header>
           <div style="display: flex; padding-top: 16px">
             <div style="flex: 0 0 375px">
@@ -161,13 +146,14 @@
             </div>
             <div style="flex: 0 0 32px"></div>
             <div style="flex: 1 0 auto">
-              <h3><span class="underline">Features:</span></h3>
+              <h3 style="padding-bottom: 0.5em"><span class="underline">Features:</span></h3>
               <ul>
-                <li>Fetch todo items</li>
+                <li>Fetch and display todo items</li>
                 <li>Create a todo item</li>
                 <li>Delete a todo item</li>
                 <li>Toggle the status of a todo item</li>
                 <li>Filter todo items by status</li>
+                <li>Show error message when delete failed</li>
               </ul>
 
               <div style="height: 32px"></div>
@@ -176,10 +162,7 @@
         </section>
         <section data-auto-animate>
           <header>
-            <h2 class="page-title">
-              Opinionated setup -
-              <small style="vertical-align: middle">Todo List example</small>
-            </h2>
+            <h2 class="page-title">Set up a mock server for Todo List</h2>
           </header>
           <div style="display: flex; padding-top: 16px">
             <div style="flex: 0 0 375px">
@@ -187,12 +170,12 @@
             </div>
             <div style="flex: 0 0 32px"></div>
             <div style="flex: 1 0 auto">
-              <h3>REST API:</h3>
+              <h3>REST API endpoints:</h3>
               <ul>
-                <li><span class="highlight-blue">GET</span> /api/todos</li>
-                <li><span class="highlight-blue">POST</span> /api/todos</li>
-                <li><span class="highlight-blue">PATCH</span> /api/todos/:id</li>
-                <li><span class="highlight-blue">DELETE</span> /api/todos/:id</li>
+                <li><span class="highlight-orange">GET</span> /api/todos</li>
+                <li><span class="highlight-orange">POST</span> /api/todos</li>
+                <li><span class="highlight-orange">PATCH</span> /api/todos/:id</li>
+                <li><span class="highlight-orange">DELETE</span> /api/todos/:id</li>
               </ul>
             </div>
           </div>
@@ -240,6 +223,13 @@
             <h2 class="page-title">Folder structure</h2>
           </header>
 
+          <p>
+            <small>
+              Basic tutorials only show you the setup for the most simple case, so you can put everything in one file. <br />
+              But we live in real world, and we need a more proper setup for future maintainaince.
+            </small>
+          </p>
+
           <div>
             <pre><code data-trim data-noescape class="plaintext">
 src
@@ -251,19 +241,19 @@ src
               </code></pre>
           </div>
 
-          <small>
+          <small class="fragment">
             <dl>
               <dt>data-storage</dt>
               <dd>files for data persist / backend states</dd>
 
               <dt>env</dt>
-              <dd>integration setup code</dd>
+              <dd>integration setup code for different contexts</dd>
 
               <dt>fixtures</dt>
-              <dd>fixture data (e.g., JSON files)</dd>
+              <dd>fixture data (e.g., JSON files, factory code)</dd>
 
               <dt>handlers</dt>
-              <dd>match and handle requests and return mocked responses</dd>
+              <dd>logic of matching and handling requests and return mocked responses</dd>
             </dl>
           </small>
         </section>
@@ -274,19 +264,17 @@ src
             <h2 class="page-title">Request handlers</h2>
           </header>
 
-          <p class="semi-small-text list-prefix-check">Easy to find when organise files <span class="underline">based on the route</span></p>
+          <div>
+            <p class="semi-small-text">
+              Files are organised <span class="underline">based on route paths</span>
+              &nbsp;&nbsp;==>
+              <span class="list-prefix-check">Easy to find and modify</span>
+            </p>
+            
+          </div>
+       
 
-          <pre style="padding-top: 0"><code data-trim data-noescape class="plaintext">
-            src/mock-server/handlers
-            ├── api
-            │   └── todos
-            │       ├── GET.ts
-            │       ├── POST.ts
-            │       └── [id]
-            │           ├── DELETE.ts
-            │           └── PATCH.ts
-            └── handlers.ts
-          </code></pre>
+          <div class="spacer-y-2"></div>
 
           <div class="small-text">
             <table style="margin: 0">
@@ -321,29 +309,25 @@ src
               </tbody>
             </table>
           </div>
-        </section>
 
-        <!-- Request handler: index all request handlers -->
-        <section>
-          <h2 class="page-title">The index of handlers</h2>
+          <div class="spacer-y-2"></div>
 
-          <div>
-            <pre><code data-trim data-noescape class="typescript">
-              // File: src/mock-server/handlers/handlers.ts
-
-              export const handlers = [
-                  require("./api/todos/GET").default,
-                  require("./api/todos/POST").default,
-                  require("./api/todos/[id]/PATCH").default,
-                  require("./api/todos/[id]/DELETE").default,
-              ];
-            </code></pre>
-          </div>
+          <pre style="padding-top: 0"><code data-trim data-noescape class="plaintext">
+            src/mock-server/handlers
+            ├── api
+            │   └── todos
+            │       ├── GET.ts
+            │       ├── POST.ts
+            │       └── [id]
+            │           ├── DELETE.ts
+            │           └── PATCH.ts
+            └── handlers.ts
+          </code></pre>
         </section>
 
         <!-- Request handler: GET /api/todos -->
         <section>
-          <h2 class="page-title">Sample request handler</h2>
+          <h2 class="page-title">Basic request handler</h2>
 
           <div>
             <pre><code data-trim data-noescape class="typescript" data-line-numbers="1,3,5,11,13|6-10">
@@ -364,19 +348,63 @@ src
           </div>
         </section>
 
+        <!-- Request handler: index all request handlers -->
+        <section>
+          <h2 class="page-title">The index of handlers</h2>
+
+          <p class="semi-small-text">To be used for integration with Browser and Node.js</p>
+
+          <div>
+            <pre><code data-trim data-noescape class="typescript">
+              // File: src/mock-server/handlers/handlers.ts
+
+              export const handlers = [
+                  require("./api/todos/GET").default,
+                  require("./api/todos/POST").default,
+                  require("./api/todos/[id]/PATCH").default,
+                  require("./api/todos/[id]/DELETE").default,
+              ];
+            </code></pre>
+          </div>
+        </section>
+
         <!-- Browser integration -->
         <section>
           <h2 class="page-title">Browser integration</h2>
           <div>
-            <pre><code data-trim data-noescape class="typescript" data-line-numbers="1-6|8-20">
+            <pre><code data-trim data-noescape class="typescript" data-line-numbers="*">
+              <script type="text/template">
               // File: src/mock-server/env/browser.ts
+
               import { setupWorker } from "msw";
               import { handlers } from "../handlers/handlers";
               
               // This configures a Service Worker with the given request handlers.
               export const worker = setupWorker(...handlers);
+              </script>
+            </code></pre>
+          </div>
+        </section>
 
+        <section data-auto-animate>
+          <h2 class="page-title">Browser integration</h2>
+          <div>
+            <pre data-id="animate-codeblock"><code data-trim data-noescape class="typescript" data-line-numbers="*">
+              <script type="text/template">
               // File: src/index.tsx
+
+              ReactDOM.render(<App />, document.querySelector("#root"));
+              </script>
+            </code></pre>
+          </div>
+        </section>
+        <section data-auto-animate>
+          <h2 class="page-title">Browser integration</h2>
+          <div>
+            <pre data-id="animate-codeblock"><code data-trim data-noescape class="typescript" data-line-numbers="1-12,14">
+              <script type="text/template">
+              // File: src/index.tsx
+
               const prepare = async () => {
                 // Setup mock server before rendering React components
                 if (process.env.NODE_ENV === "development") {
@@ -389,6 +417,7 @@ src
               prepare().then(() => {
                 ReactDOM.render(<App />, document.querySelector("#root"));
               });
+              </script>
             </code></pre>
           </div>
         </section>
@@ -444,11 +473,14 @@ src
 
         <!-- Make the mock server to be more real -->
         <section>
-          <h2 class="page-title">Mock server, more real?</h2>
-          <p>Go beyond serving static data for every single request</p>
+          <h2 class="page-title">Mock server, Real behaviour?</h2>
+          <p>We are not satisfied with a mock server that just serving static data for every single request...</p>
+          <div class="spacer-y-2"></div>
+          <p>We want the mock server to be able to...</p>
           <ul>
-            <li>Dynamic response based on request information</li>
-            <li>Handle backend states / persist data</li>
+            <li>Return response dynamically based on request information</li>
+            <li>Handle backend states & persist data</li>
+            <li>Overwrite request handler in specific test cases</li>
           </ul>
         </section>
 
@@ -512,11 +544,11 @@ src
           <h2 class="page-title">Backend states / persist data</h2>
           <div style="display: flex; padding-top: 16px">
             <div style="flex: 0 0 375px">
-              <iframe src="http://localhost:3000" width="375" height="667"></iframe>
+              <iframe src="http://localhost:2999" width="375" height="667"></iframe>
             </div>
             <div style="flex: 0 0 32px"></div>
             <div style="flex: 1 0 auto">
-              <p><span class="underline">Imagine</span></p>
+              <p style="padding-bottom: 0.5em;"><span class="underline">Imagine</span></p>
               <ul>
                 <li>we don't keep backend states</li>
                 <li>todo items should be filtered by backend</li>
@@ -530,7 +562,7 @@ src
           <h2 class="page-title">Backend states: implementation</h2>
           <div>
             <pre>
-                <code data-trim data-noescape class="typescript" data-line-numbers="*|2-7|9-23|25-29">
+                <code data-trim data-noescape class="typescript" data-line-numbers="1|2-7|9-23|25-29">
                   <script type="text/template">
                     export abstract class DataStorage<KEY, DATA> {
                       readonly store: Map<KEY, DATA>;
@@ -583,6 +615,7 @@ src
                       }
                     
                       getNextId(): number {
+                        // Simulate auto-increment ID
                         const maxId = max(Array.from(this.store.keys())) || 0;
                         return maxId + 1;
                       }
@@ -617,7 +650,9 @@ src
           <div>
             <pre data-id="code-animation">
                 <code data-trim data-noescape class="typescript" data-line-numbers="*">
-                  <script type="text/template">                    
+                  <script type="text/template">
+                    // File: src/setupTests.ts
+                    
                     // Establish API mocking before all tests.
                     beforeAll(() => server.listen());
                     
@@ -632,8 +667,10 @@ src
           <h2 class="page-title">Backend states: implementation</h2>
           <div>
             <pre data-id="code-animation">
-                <code data-trim data-noescape class="typescript" data-line-numbers="7-8">
-                  <script type="text/template">                    
+                <code data-trim data-noescape class="typescript" data-line-numbers="9,10">
+                  <script type="text/template">           
+                    // File: src/setupTests.ts
+                    
                     // Establish API mocking before all tests.
                     beforeAll(() => server.listen());
                     
@@ -790,7 +827,7 @@ src
 
         <!-- Gotcha -->
         <section>
-          <h2 class="page-title">Gotcha</h2>
+          <h2 class="page-title">Gotchas</h2>
           <dl>
             <dt>HTTPS</dt>
             <dd class="list-prefix-check">&nbsp;Locahost + HTTP/S</dd>
@@ -804,7 +841,7 @@ src
             <dd class="list-prefix-check">&nbsp;Life-cycle events</dd>
             <dd class="list-prefix-cross">
               Middleware
-              <small style="vertical-align: middle"> (workaround: wrap rest.get() / .post() / etc) </small>
+              <small style="vertical-align: middle"> (workaround: wrap handler factory functions such as rest.get() / .post() / etc) </small>
             </dd>
           </dl>
         </section>
@@ -827,7 +864,7 @@ src
           <h2 class="page-title">In the end</h2>
           <ul>
             <li>Mocking is useful: developing, testing, debugging</li>
-            <li>MSW.js is a powerful tool for mocking</li>
+            <li><span class="highlight-orange">MSW.js</span> is a powerful tool for mocking</li>
             <li>Tips to make the mock feels more real and manageable</li>
           </ul>
           <div style="width: 50%; margin: 1.5em 0 1.5em 50%; border-bottom: white 5px solid"></div>

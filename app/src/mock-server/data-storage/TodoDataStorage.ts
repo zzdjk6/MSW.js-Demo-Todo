@@ -9,6 +9,7 @@ export class TodoDataStorage extends DataStorage<number, Todo> {
     // Reload fixtures
     this.store.set(1, require("../fixtures/todos/1.json"));
     this.store.set(2, require("../fixtures/todos/2.json"));
+    this.store.set(3, require("../fixtures/todos/3.json"));
   }
 
   getNextId(): number {
