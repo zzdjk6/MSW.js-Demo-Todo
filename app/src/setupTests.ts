@@ -13,6 +13,5 @@ afterEach(() => server.resetHandlers());
 // Clean up after the tests are finished.
 afterAll(() => server.close());
 
-// Reset mock data storage
-beforeAll(() => resetMockDataStore());
+// Reset mock data storage after each tests
 afterEach(() => resetMockDataStore());

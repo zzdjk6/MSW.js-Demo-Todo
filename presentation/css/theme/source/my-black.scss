@@ -1,0 +1,166 @@
+/**
+ * Black theme for reveal.js. This is the opposite of the 'white' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+// Include theme-specific fonts
+@import url(./fonts/source-sans-pro/source-sans-pro.css);
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #191919;
+
+$mainColor: #fff;
+$headingColor: #fff;
+
+$mainFontSize: 42px;
+$mainFont: "Source Sans Pro", Helvetica, sans-serif;
+$headingFont: "Source Sans Pro", Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: none;
+$headingFontWeight: 500;
+$linkColor: #42affa;
+$linkColorHover: lighten($linkColor, 15%);
+$selectionBackgroundColor: lighten($linkColor, 25%);
+
+$heading1Size: 1em;
+$heading2Size: 1em;
+$heading3Size: 1em;
+$heading4Size: 1em;
+
+// Change text colors against light slide backgrounds
+@include light-bg-text-color(#222);
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+// Custom
+
+.reveal .slides section {
+  text-align: left;
+  font-size: 1em;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  i {
+    font-style: italic;
+  }
+
+  ul {
+    line-height: 1.5;
+  }
+
+  pre {
+    margin: 0;
+    padding: 16px 0;
+    width: 100%;
+
+    code {
+      max-height: 22em;
+    }
+  }
+
+  .intro-hashtag {
+    color: lightgray;
+    font-size: 0.5em;
+    padding-top: 0.5em;
+  }
+
+  .intro-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .intro-header > h2 {
+    text-transform: none;
+    font-size: 1.25em;
+  }
+
+  .intro-header > h3 {
+    text-transform: none;
+    font-size: 1em;
+  }
+
+  .intro-footer {
+    font-size: 0.5em;
+    padding-bottom: 0.5em;
+  }
+
+  .page-title {
+    padding: 0;
+    line-height: 200%;
+    font-size: 1.25em;
+  }
+
+  .highlight-orange {
+    color: orange;
+  }
+
+  .highlight-blue {
+    color: #569cd6;
+  }
+
+  .list-prefix-check::before {
+    content: "☑";
+    color: lightseagreen;
+    display: inline-flex;
+    width: 44px;
+    justify-content: center;
+  }
+
+  .list-prefix-cross::before {
+    content: "𐄂";
+    color: red;
+    display: inline-flex;
+    width: 1em;
+    justify-content: center;
+  }
+
+  span.underline {
+    display: inline-block;
+    padding-bottom: 2x;
+    border-bottom: white 2px solid;
+  }
+
+  .small-text {
+    font-size: 0.5em;
+  }
+
+  .semi-small-text {
+    font-size: 0.75em;
+  }
+
+  @mixin gen-spacer($num) {
+    .spacer-y-#{$num} {
+      padding-bottom: (16px * $num);
+    }
+  }
+
+  .spacer-y {
+    padding-bottom: 16px;
+  }
+  @include gen-spacer(1);
+  @include gen-spacer(2);
+  @include gen-spacer(3);
+  @include gen-spacer(4);
+}
