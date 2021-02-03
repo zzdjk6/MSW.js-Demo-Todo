@@ -47,7 +47,7 @@
         </section>
 
         <!-- Why mocking -->
-        <section>
+        <section data-auto-animate>
           <header>
             <h2 class="page-title">Why mocking?</h2>
           </header>
@@ -69,7 +69,7 @@
             </div>
           </div>
         </section>
-        <section>
+        <section data-auto-animate>
           <header>
             <h2 class="page-title">Why mocking?</h2>
           </header>
@@ -369,7 +369,7 @@ src
         </section>
 
         <!-- Browser integration -->
-        <section>
+        <section data-auto-animate>
           <h2 class="page-title">Browser integration</h2>
           <div>
             <pre><code data-trim data-noescape class="typescript" data-line-numbers="*">
@@ -422,7 +422,7 @@ src
           </div>
         </section>
 
-        <section>
+        <section data-auto-animate>
           <h2 class="page-title">Browser integration</h2>
           <div>
             <img src="img/msw-browser-log-success.png" alt="" />
@@ -438,7 +438,7 @@ src
         </section>
 
         <!-- Node.js integration -->
-        <section>
+        <section data-auto-animate>
           <h2 class="page-title">Node.js integration</h2>
           <ul>
             <li>No service worker</li>
@@ -456,7 +456,7 @@ src
           </code></pre>
         </section>
 
-        <section>
+        <section data-auto-animate>
           <h2 class="page-title">Node.js integration</h2>
           <pre><code data-trim data-noescape class="typescript">
             // File: src/setupTests.ts
@@ -535,10 +535,6 @@ src
             <li>A feature or business logic flow would require a series of user interactions and API requests</li>
             <li>...and the states / data need to be persisted during the flow</li>
           </ul>
-
-          <div class="spacer-y-3"></div>
-
-          <div style="text-align: center">step 1 ====> step 2 ====> step 3</div>
         </section>
         <section>
           <h2 class="page-title">Backend states / persist data</h2>
@@ -746,7 +742,7 @@ src
                 
                     // Temporarily force delete api to return error
                     server.use(
-                      rest.delete("/todo/:id", (req, res, ctx) => {
+                      rest.delete("/api/todos/:id", (req, res, ctx) => {
                         return res(ctx.status(400));
                       })
                     );
@@ -759,7 +755,7 @@ src
                 
                     // Expect error message displays
                     await waitFor(() => {
-                      expect(screen.queryByText(/Fail to delete/i));
+                      expect(screen.queryByText(/Fail to delete/i)).toBeInTheDocument();
                     });
                 
                     // Assert the item is still there

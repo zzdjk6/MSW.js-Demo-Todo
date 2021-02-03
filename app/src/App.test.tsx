@@ -5,16 +5,18 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { server } from "./mock-server/env/nodejs";
 import { rest } from "msw";
+import React from "react";
 
 // Constants and Helpers
 const TODO_1_TEXT = "TODO1: Active";
 const TODO_2_TEXT = "TODO2: Completed";
+const TODO_3_TEXT = "TODO3: Can't delete";
 const getTodoItems = () => screen.getAllByTestId("TodoItem");
 const queryTodoItems = () => screen.queryAllByTestId("TodoItem");
 const renderApp = async () => {
   const renderResult = render(<App />);
   await waitFor(() => {
-    expect(getTodoItems()).toHaveLength(2);
+    expect(getTodoItems()).toHaveLength(3);
   });
   return renderResult;
 };
@@ -28,6 +30,7 @@ describe("Fetch and display todo items", () => {
     const todoItems = getTodoItems();
     expect(within(todoItems[0]).getByText(TODO_1_TEXT)).toBeInTheDocument();
     expect(within(todoItems[1]).getByText(TODO_2_TEXT)).toBeInTheDocument();
+    expect(within(todoItems[2]).getByText(TODO_3_TEXT)).toBeInTheDocument();
   });
 
   it("should fetch and display active todo items", async () => {
@@ -39,7 +42,9 @@ describe("Fetch and display todo items", () => {
 
     // Assert active items
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(1);
+      expect(
+        within(getTodoItems()[0]).getByText(TODO_1_TEXT)
+      ).toBeInTheDocument();
     });
     expect(screen.getByText(TODO_1_TEXT)).toBeInTheDocument();
   });
@@ -53,7 +58,7 @@ describe("Fetch and display todo items", () => {
 
     // Assert completed items
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(1);
+      expect(getTodoItems()).toHaveLength(2);
     });
     expect(screen.getByText(TODO_2_TEXT)).toBeInTheDocument();
   });
@@ -76,7 +81,7 @@ describe("Delete todo item", () => {
 
     // Assert the active item disappear
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(1);
+      expect(getTodoItems()).toHaveLength(2);
     });
     expect(screen.queryByText(TODO_1_TEXT)).not.toBeInTheDocument();
   });
@@ -97,7 +102,7 @@ describe("Delete todo item", () => {
 
     // Assert the completed item disappear
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(1);
+      expect(getTodoItems()).toHaveLength(2);
     });
     expect(screen.queryByText(TODO_2_TEXT)).not.toBeInTheDocument();
   });
@@ -112,7 +117,7 @@ describe("Delete todo item", () => {
 
     // Temporarily force delete api to return error
     server.use(
-      rest.delete("/todo/:id", (req, res, ctx) => {
+      rest.delete("/api/todos/:id", (req, res, ctx) => {
         return res(ctx.status(400));
       })
     );
@@ -125,7 +130,7 @@ describe("Delete todo item", () => {
 
     // Expect error message displays
     await waitFor(() => {
-      expect(screen.queryByText(/Fail to delete/i));
+      expect(screen.queryByText(/Fail to delete/i)).toBeInTheDocument();
     });
 
     // Assert the item is still there
@@ -140,13 +145,13 @@ describe("Add todo item", () => {
 
     // Create a new item
     const input = screen.getByLabelText("Add todo...");
-    await userEvent.type(input, "TODO3: XXX{enter}");
+    await userEvent.type(input, "TODO4: XXX{enter}");
 
     // Assert new item
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(3);
+      expect(getTodoItems()).toHaveLength(4);
     });
-    expect(screen.getByText("TODO3: XXX")).toBeInTheDocument();
+    expect(screen.getByText("TODO4: XXX")).toBeInTheDocument();
   });
 
   it("can add todo item in tab Active", async () => {
@@ -161,13 +166,13 @@ describe("Add todo item", () => {
 
     // Create a new item
     const input = screen.getByLabelText("Add todo...");
-    await userEvent.type(input, "TODO3: XXX{enter}");
+    await userEvent.type(input, "TODO4: XXX{enter}");
 
     // Assert the new item
     await waitFor(() => {
       expect(getTodoItems()).toHaveLength(2);
     });
-    expect(screen.getByText("TODO3: XXX")).toBeInTheDocument();
+    expect(screen.getByText("TODO4: XXX")).toBeInTheDocument();
   });
 
   it("cannot add todo item in tab Completed", async () => {
@@ -177,7 +182,7 @@ describe("Add todo item", () => {
     // Change to tab "completed"
     userEvent.click(screen.getByRole("tab", { name: /completed/i }));
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(1);
+      expect(getTodoItems()).toHaveLength(2);
     });
 
     // Assert no input to create item
@@ -207,10 +212,10 @@ describe("Change status of todo item", () => {
       expect(queryTodoItems()).toHaveLength(0);
     });
 
-    // Assert 2 completed items in tab "completed"
+    // Assert 3 completed items in tab "completed"
     userEvent.click(screen.getByRole("tab", { name: /completed/i }));
     await waitFor(() => {
-      expect(getTodoItems()).toHaveLength(2);
+      expect(getTodoItems()).toHaveLength(3);
     });
   });
 
